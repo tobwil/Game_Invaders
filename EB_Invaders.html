@@ -13,11 +13,37 @@
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <canvas id="gameCanvas" width="480" height="320"></canvas>
+    <div class="flex flex-col items-center">
+        <canvas id="gameCanvas" width="480" height="320"></canvas>
+
+        <div class="mt-8 w-full">
+            <div class="flex justify-start">
+                <label for="bulletColor">Bullet Color: </label>
+                <input type="color" id="bulletColor" value="#00FF00" class="ml-2">
+            </div>
+            <div class="flex justify-start mt-2">
+                <label for="shipImage">Ship Image Link: </label>
+                <input type="text" id="shipImage" class="ml-2">
+            </div>
+            <div class="flex justify-start mt-2">
+                <label for="invaderImage">Invader Image Link: </label>
+                <input type="text" id="invaderImage" class="ml-2">
+            </div>
+            <div class="flex justify-start mt-2">
+                <label for="winningMessage">Winning Message: </label>
+                <input type="text" id="winningMessage" class="ml-2">
+            </div>
+            <div class="flex justify-start mt-2">
+                <label for="losingMessage">Losing Message: </label>
+                <input type="text" id="losingMessage" class="ml-2">
+            </div>
+        </div>
+    </div>
+
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-
+        
         const shipImg = new Image();
         shipImg.src = 'https://drive.google.com/uc?id=1GwxkfnrR9xKU6CFkT8q2zbdIZTf1WNFI';
 
@@ -79,7 +105,7 @@
             bullets.forEach((bullet, index) => {
                 ctx.beginPath();
                 ctx.rect(bullet.x, bullet.y, bullet.width, bullet.height);
-                ctx.fillStyle = 'white';
+                ctx.fillStyle = document.getElementById('bulletColor').value;
                 ctx.fill();
                 ctx.closePath();
 
@@ -121,7 +147,6 @@
         }
 
         function updateInvaders() {
-
             let changeDirection = false;
 
             invaders.forEach(invader => {
@@ -138,7 +163,6 @@
                     invader.y += invaderSize.height / 2;
                 });
             }
-
         }
 
         function shoot() {
@@ -164,16 +188,29 @@
             });
         }
 
-        function displayWinningMessage() {
+        let startTime = Date.now();
+
+        function displayTimeElapsed() {
+            const currentTime = Date.now();
+            const timeElapsed = ((currentTime - startTime) / 1000).toFixed(2);
             ctx.font = '20px Arial';
             ctx.fillStyle = 'white';
-            ctx.fillText("YOU'RE HIRED!", canvas.width / 2 - 150, canvas.height / 2);
+            ctx.fillText("Time: " + timeElapsed + "s", canvas.width / 2 - 70, canvas.height / 2 + 30);
+        }
+
+        function displayWinningMessage() {
+            const winningMessage = document.getElementById('winningMessage').value || "YOU'VE WON";
+            ctx.font = '30px Arial';
+            ctx.fillStyle = 'white';
+            ctx.fillText(winningMessage, canvas.width / 2 - 150, canvas.height / 2);
+            displayTimeElapsed();
         }
 
         function displayLosingMessage() {
-            ctx.font = '20px Arial';
+            const losingMessage = document.getElementById('losingMessage').value || "YOU'VE LOST";
+            ctx.font = '30px Arial';
             ctx.fillStyle = 'white';
-            ctx.fillText("YOU'VE LOST", canvas.width / 2 - 60, canvas.height / 2);
+            ctx.fillText(losingMessage, canvas.width / 2 - 60, canvas.height / 2);
         }
 
         function checkWin() {
@@ -205,6 +242,19 @@
             return false;
         }
 
+        function updateImageSrc() {
+            const shipImageInput = document.getElementById('shipImage');
+            const invaderImageInput = document.getElementById('invaderImage');
+
+            if (shipImageInput.value) {
+                shipImg.src = shipImageInput.value;
+            }
+
+            if (invaderImageInput.value) {
+                invaderImg.src = invaderImageInput.value;
+            }
+        }
+
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawShip();
@@ -214,6 +264,7 @@
             updateInvaders();
             shoot();
             checkCollisions();
+            updateImageSrc();
 
             if (!checkWin() && !checkLoss()) {
                 requestAnimationFrame(draw);
