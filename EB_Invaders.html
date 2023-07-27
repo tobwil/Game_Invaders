@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        canvas {
+            display: block;
+            margin: 0 auto;
+            background-color: #000;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <canvas id="gameCanvas" width="480" height="320"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const shipImg = new Image();
+        shipImg.src = 'https://drive.google.com/uc?id=1GwxkfnrR9xKU6CFkT8q2zbdIZTf1WNFI';
+
+        const invaderImg = new Image();
+        invaderImg.src = 'https://drive.google.com/uc?id=1yH6-Ljrrlia4mXSigHmU4_27gNjNZhpX';
+
+        const ship = {
+            x: canvas.width / 2 - 15,
+            y: canvas.height - 30,
+            width: 30,
+            height: 30,
+            speed: 4,
+        };
+
+        const bullets = [];
+
+        function Bullet(x, y) {
+            this.x = x;
+            this.y = y;
+            this.width = 5;
+            this.height = 10;
+            this.speed = 6;
+        }
+
+        let leftPressed = false;
+        let rightPressed = false;
+        let spacePressed = false;
+        let canShoot = true;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') leftPressed = true;
+            if (e.key === 'ArrowRight') rightPressed = true;
+            if (e.code === 'Space') spacePressed = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowLeft') leftPressed = false;
+            if (e.key === 'ArrowRight') rightPressed = false;
+            if (e.code === 'Space') {
+                spacePressed = false;
+                canShoot = true;
+            }
+        });
+
+        function drawShip() {
+            ctx.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
+        }
+
+        function updateShip() {
+            if (leftPressed && ship.x > 0) {
+                ship.x -= ship.speed;
+            }
+            if (rightPressed && ship.x + ship.width < canvas.width) {
+                ship.x += ship.speed;
+            }
+        }
+
+        function drawBullets() {
+            bullets.forEach((bullet, index) => {
+                ctx.beginPath();
+                ctx.rect(bullet.x, bullet.y, bullet.width, bullet.height);
+                ctx.fillStyle = 'white';
+                ctx.fill();
+                ctx.closePath();
+
+                bullet.y -= bullet.speed;
+
+                if (bullet.y < -bullet.height) {
+                    bullets.splice(index, 1);
+                }
+            });
+        }
+
+        const invaders = [];
+        const invaderSize = { width: 20, height: 20 };
+        const invaderSpacing = 10;
+        let invadersDirection = 1;
+        const invadersSpeed = 0.8;
+
+        function Invader(x, y) {
+            this.x = x;
+            this.y = y;
+            this.width = invaderSize.width;
+            this.height = invaderSize.height;
+        }
+
+        function createInvaders() {
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 10; j++) {
+                    const x = 25 + (j * (invaderSize.width + invaderSpacing));
+                    const y = 20 + (i * (invaderSize.height + invaderSpacing));
+                    invaders.push(new Invader(x, y));
+                }
+            }
+        }
+
+        function drawInvaders() {
+            invaders.forEach(invader => {
+                ctx.drawImage(invaderImg, invader.x, invader.y, invader.width, invader.height);
+            });
+        }
+
+        function updateInvaders() {
+
+            let changeDirection = false;
+
+            invaders.forEach(invader => {
+                invader.x += invadersDirection * invadersSpeed;
+
+                if (invader.x + invader.width > canvas.width || invader.x < 0) {
+                    changeDirection = true;
+                }
+            });
+
+            if (changeDirection) {
+                invadersDirection *= -1;
+                invaders.forEach(invader => {
+                    invader.y += invaderSize.height / 2;
+                });
+            }
+
+        }
+
+        function shoot() {
+            if (spacePressed && canShoot) {
+                const bulletX = ship.x + ship.width / 2 - 2.5;
+                const bulletY = ship.y;
+                bullets.push(new Bullet(bulletX, bulletY));
+                canShoot = false;
+            }
+        }
+
+        function checkCollisions() {
+            bullets.forEach((bullet, bulletIndex) => {
+                invaders.forEach((invader, invaderIndex) => {
+                    if (bullet.x < invader.x + invader.width &&
+                        bullet.x + bullet.width > invader.x &&
+                        bullet.y < invader.y + invader.height &&
+                        bullet.y + bullet.height > invader.y) {
+                        bullets.splice(bulletIndex, 1);
+                        invaders.splice(invaderIndex, 1);
+                    }
+                });
+            });
+        }
+
+        function displayWinningMessage() {
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'white';
+            ctx.fillText("YOU'RE HIRED!", canvas.width / 2 - 150, canvas.height / 2);
+        }
+
+        function displayLosingMessage() {
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'white';
+            ctx.fillText("YOU'VE LOST", canvas.width / 2 - 60, canvas.height / 2);
+        }
+
+        function checkWin() {
+            if (invaders.length === 0) {
+                displayWinningMessage();
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+                return true;
+            }
+            return false;
+        }
+
+        function checkLoss() {
+            let lost = false;
+            invaders.forEach(invader => {
+                if (invader.y + invader.height >= ship.y) {
+                    lost = true;
+                }
+            });
+
+            if (lost) {
+                displayLosingMessage();
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
+                return true;
+            }
+            return false;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawShip();
+            updateShip();
+            drawBullets();
+            drawInvaders();
+            updateInvaders();
+            shoot();
+            checkCollisions();
+
+            if (!checkWin() && !checkLoss()) {
+                requestAnimationFrame(draw);
+            }
+        }
+
+        createInvaders();
+        draw();
+    </script>
+</body>
+</html>
