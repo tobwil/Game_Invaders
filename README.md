@@ -1,6 +1,13 @@
 # Invaders the Game - fully customizable 
+### V2.1
+New
+* Highscore on LocalStorage
+* Font Change
+  
+![highscore](https://github.com/tobwil/Game_Invaders/assets/72387477/ce6d5879-5da7-479f-a6f4-c91993df66ce)
+
 ### V2.0
-New added functionality:
+New
 * change bullet colors live during game
 * exchange images for ship and invader live
 * change messages for winning and losing live
