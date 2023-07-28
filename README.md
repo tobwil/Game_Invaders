@@ -2,9 +2,9 @@
 ### V3.0
 New
 * adde touch functionality to play on mobile/tablet
-  * Touch at **left** are of game window --> **_MOVE LEFT_**
-  * Touch at **right** are of game window --> **_MOVE RIGHT_**
-  * Touch at **center** are of game window --> **_SHOOT_**
+  * Touch at **left** of game window --> **_MOVE LEFT_**
+  * Touch at **right** of game window --> **_MOVE RIGHT_**
+  * Touch at **center** of game window --> **_SHOOT_**
 
 <img width="570" alt="touch" src="https://github.com/tobwil/Game_Invaders/assets/72387477/c303b453-3472-48cc-aecd-05d842319915">
 
