@@ -14,6 +14,9 @@
             display: block;
             margin: 0 auto;
             background-color: #000;
+            background-image: url('https://img.freepik.com/free-vector/abstract-background-with-dark-pixel-style-design_1048-15775.jpg'); //Image by kjpargeter on Freepik
+            background-repeat: no-repeat;
+            background-size: cover;
         }
     </style>
 </head>
@@ -27,11 +30,11 @@
                 <input type="color" id="bulletColor" value="#00FF00" class="ml-2">
             </div>
             <div class="flex justify-start mt-2">
-                <label for="shipImage">Change Ship - Link to PNG: </label>
+                <label for="shipImage">Change Ship (Link): </label>
                 <input type="text" id="shipImage" class="ml-2">
             </div>
             <div class="flex justify-start mt-2">
-                <label for="invaderImage">Change Invader - Link to PNG: </label>
+                <label for="invaderImage">Change Invader (Link): </label>
                 <input type="text" id="invaderImage" class="ml-2">
             </div>
             <div class="flex justify-start mt-2">
@@ -41,6 +44,10 @@
             <div class="flex justify-start mt-2">
                 <label for="losingMessage">Losing Message: </label>
                 <input type="text" id="losingMessage" class="ml-2">
+            </div>
+            <div class="flex justify-start mt-2">
+                <label for="backgroundImage">Change Background (Link): </label>
+                <input type="text" id="backgroundImage" class="ml-2">
             </div>
         </div>
     </div>
@@ -272,6 +279,7 @@
         function updateImageSrc() {
             const shipImageInput = document.getElementById('shipImage');
             const invaderImageInput = document.getElementById('invaderImage');
+            const backgroundImageInput = document.getElementById('backgroundImage');
 
             if (shipImageInput.value) {
                 shipImg.src = shipImageInput.value;
@@ -279,6 +287,10 @@
 
             if (invaderImageInput.value) {
                 invaderImg.src = invaderImageInput.value;
+            }
+
+            if (backgroundImageInput.value) {
+                canvas.style.backgroundImage = "url('" + backgroundImageInput.value + "')";
             }
         }
 
