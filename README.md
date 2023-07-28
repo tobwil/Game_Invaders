@@ -1,4 +1,10 @@
 # Invaders the Game - fully customizable 
+### V2.2
+New
+* Change Background live during game
+
+<img width="570" alt="Capture" src="https://github.com/tobwil/Game_Invaders/assets/72387477/c72e4847-6798-4833-84d2-bf68aa881d2b">
+
 ### V2.1
 New
 * Highscore on LocalStorage
