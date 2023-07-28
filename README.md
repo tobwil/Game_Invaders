@@ -1,8 +1,17 @@
 # Invaders the Game - fully customizable 
+### V3.0
+New
+* adde touch functionality to play on mobile/tablet
+  * Touch at **left** are of game window --> **_MOVE LEFT_**
+  * Touch at **right** are of game window --> **_MOVE RIGHT_**
+  * Touch at **center** are of game window --> **_SHOOT_**
+
+<img width="570" alt="touch" src="https://github.com/tobwil/Game_Invaders/assets/72387477/c303b453-3472-48cc-aecd-05d842319915">
+
 ### V2.2
 New
 * Change Background live during game
-  
+
 <img width="570" alt="Capture" src="https://github.com/tobwil/Game_Invaders/assets/72387477/20f975fb-0319-4edd-9ea8-05cdcca36a9a">
 
 ### V2.1
