@@ -14,7 +14,7 @@
             display: block;
             margin: 0 auto;
             background-color: #000;
-            background-image: url('https://github.com/tobwil/Game_Invaders/blob/main/Background%20Images/Background%20AI%20generated%2014.png?raw=true'); 
+            background-image: url('https://github.com/tobwil/Game_Invaders/blob/main/Background%20Images/Background%20AI%20generated%2014.png?raw=true');
             background-repeat: no-repeat;
             background-size: cover;
         }
@@ -38,17 +38,17 @@
                 <input type="text" id="invaderImage" class="ml-2">
             </div>
             <div class="flex justify-start mt-2">
+                <label for="backgroundImage">Change Background (Link): </label>
+                <input type="text" id="backgroundImage" class="ml-2">
+            </div>
+            <div class="flex justify-start mt-2">
                 <label for="winningMessage">Winning Message: </label>
                 <input type="text" id="winningMessage" class="ml-2">
             </div>
             <div class="flex justify-start mt-2">
                 <label for="losingMessage">Losing Message: </label>
                 <input type="text" id="losingMessage" class="ml-2">
-            </div>
-            <div class="flex justify-start mt-2">
-                <label for="backgroundImage">Change Background (Link): </label>
-                <input type="text" id="backgroundImage" class="ml-2">
-            </div>
+            </div>            
         </div>
     </div>
 
@@ -99,6 +99,37 @@
                 canShoot = true;
             }
         });
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleTouch(e.touches);
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            handleTouch(e.touches);
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            leftPressed = false;
+            rightPressed = false;
+            spacePressed = false;
+            canShoot = true;
+        });
+
+        function handleTouch(touches) {
+            for (let i = 0; i < touches.length; i++) {
+                const touchX = touches[i].clientX;
+
+                if (touchX < canvas.width / 3) {
+                    leftPressed = true;
+                } else if (touchX >= canvas.width / 3 && touchX < 2 * canvas.width / 3) {
+                    spacePressed = true;
+                } else {
+                    rightPressed = true;
+                }
+            }
+        }
 
         function drawShip() {
             ctx.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height);
