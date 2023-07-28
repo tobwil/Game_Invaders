@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Tektur&display=swap" rel="stylesheet">
     <style>
+        body {
+            font-family: 'Tektur', cursive;
+        }
+
         canvas {
             display: block;
             margin: 0 auto;
@@ -18,15 +23,15 @@
 
         <div class="mt-8 w-full">
             <div class="flex justify-start">
-                <label for="bulletColor">Bullet Color: </label>
+                <label for="bulletColor">Change Bullet Color: </label>
                 <input type="color" id="bulletColor" value="#00FF00" class="ml-2">
             </div>
             <div class="flex justify-start mt-2">
-                <label for="shipImage">Ship Image Link: </label>
+                <label for="shipImage">Change Ship - Link to PNG: </label>
                 <input type="text" id="shipImage" class="ml-2">
             </div>
             <div class="flex justify-start mt-2">
-                <label for="invaderImage">Invader Image Link: </label>
+                <label for="invaderImage">Change Invader - Link to PNG: </label>
                 <input type="text" id="invaderImage" class="ml-2">
             </div>
             <div class="flex justify-start mt-2">
@@ -190,17 +195,33 @@
 
         let startTime = Date.now();
 
+        function getHighscore() {
+            if (localStorage.getItem('highscore')) {
+                return JSON.parse(localStorage.getItem('highscore'));
+            } else {
+                return 0;
+            }
+        }
+
+        function displayHighscore() {
+            const highscore = getHighscore();
+            ctx.font = '20px Tektur';
+            ctx.fillStyle = 'white';
+            ctx.fillText("Highscore: " + highscore + "s", 10, canvas.height - 10);
+        }
+
         function displayTimeElapsed() {
             const currentTime = Date.now();
             const timeElapsed = ((currentTime - startTime) / 1000).toFixed(2);
-            ctx.font = '20px Arial';
+            ctx.font = '20px Tektur';
             ctx.fillStyle = 'white';
             ctx.fillText("Time: " + timeElapsed + "s", canvas.width / 2 - 70, canvas.height / 2 + 30);
+            displayHighscore();
         }
 
         function displayWinningMessage() {
             const winningMessage = document.getElementById('winningMessage').value || "YOU'VE WON";
-            ctx.font = '30px Arial';
+            ctx.font = '30px Tektur';
             ctx.fillStyle = 'white';
             ctx.fillText(winningMessage, canvas.width / 2 - 150, canvas.height / 2);
             displayTimeElapsed();
@@ -208,13 +229,19 @@
 
         function displayLosingMessage() {
             const losingMessage = document.getElementById('losingMessage').value || "YOU'VE LOST";
-            ctx.font = '30px Arial';
+            ctx.font = '30px Tektur';
             ctx.fillStyle = 'white';
             ctx.fillText(losingMessage, canvas.width / 2 - 60, canvas.height / 2);
         }
 
         function checkWin() {
             if (invaders.length === 0) {
+                const currentTime = Date.now();
+                const timeElapsed = ((currentTime - startTime) / 1000).toFixed(2);
+                const currentHighscore = getHighscore();
+                if (!currentHighscore || parseFloat(timeElapsed) < parseFloat(currentHighscore)) {
+                    localStorage.setItem('highscore', timeElapsed);
+                }
                 displayWinningMessage();
                 setTimeout(() => {
                     location.reload();
