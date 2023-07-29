@@ -1,7 +1,7 @@
 # Invaders the Game - fully customizable 
 ### V3.0
 New
-* adde touch functionality to play on mobile/tablet
+* added touch functionality to play on mobile/tablet
   * Touch **left** in game window --> **_MOVE LEFT_**
   * Touch **right** in game window --> **_MOVE RIGHT_**
   * Touch **center** in game window --> **_SHOOT_**
