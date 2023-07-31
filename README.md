@@ -1,5 +1,5 @@
 # Invaders the Game 
-🎮 [PLAY HERE](https://tobwil.github.io/Game_Invaders/EB_Invaders.html) 🎮
+🎮 [PLAY HERE](https://tobwil.github.io/Invaders/EB_Invaders.html) 🎮
 ### V3.0
 New
 * added touch functionality to play on mobile/tablet
